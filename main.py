@@ -1,9 +1,8 @@
 import os
 import numpy as np
-import scipy.io as sio
 import pandas as pd
 from tkinter import filedialog
-import matplotlib.pyplot as plt
+from plot import plot_data
 
 filepaths = filedialog.askopenfilenames(filetypes=[("Excel files", "*.xlsx")])
 
@@ -60,47 +59,8 @@ for filepath in filepaths:
         LL_all_post = np.hstack((LL_all_post, LL[:, :5]))
         RL_all_post = np.hstack((RL_all_post, RL[:, :5]))
 
+print("Do you want to plot the data?")
+answer=input()
+if answer.lower()=="yes":
+    plot_data(LH_all_pre, RH_all_pre, LL_all_pre, RL_all_pre)
 
-time_per_row = np.arange(0, 5 * 2, 2)  #time vector size 10 mins with 2 mins interval
-fig, axs = plt.subplots(4, 1, figsize=(12, 24))
-
-for i in range(LH_all_pre.shape[0]):
-    axs[0].plot(time_per_row, LH_all_pre[i, :], label=f"Row {i+1}")
-
-axs[0].set_title("LH Data - Time vs Amplitude")
-axs[0].set_xlabel("Time (minutes)")
-axs[0].set_ylabel("Amplitude")
-axs[0].legend()
-axs[0].grid(True)
-
-
-for i in range(RH_all_pre.shape[0]):
-    axs[1].plot(time_per_row, RH_all_pre[i, :]) #, label=f"Row {i+1}")
-
-axs[1].set_title("RH Data - Time vs Amplitude")
-axs[1].set_xlabel("Time (minutes)")
-axs[1].set_ylabel("Amplitude")
-axs[1].legend()
-axs[1].grid(True)
-
-
-for i in range(LL_all_pre.shape[0]):
-    axs[2].plot(time_per_row, LL_all_pre[i, :], label=f"Row {i+1}")
-
-axs[2].set_title("LL Data - Time vs Amplitude")
-axs[2].set_xlabel("Time (minutes)")
-axs[2].set_ylabel("Amplitude")
-axs[2].legend()
-axs[2].grid(True)
-
-for i in range(RL_all_pre.shape[0]):
-    axs[3].plot(time_per_row, RL_all_pre[i, :], label=f"Row {i+1}")
-
-axs[3].set_title("RL Data - Time vs Amplitude")
-axs[3].set_xlabel("Time (minutes)")
-axs[3].set_ylabel("Amplitude")
-axs[3].legend()
-axs[3].grid(True)
-
-plt.tight_layout(pad=2.0)
-plt.show()
