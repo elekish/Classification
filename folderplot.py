@@ -62,12 +62,9 @@ import seaborn as sns
 #     plt.tight_layout(pad=2.0)
 #     plt.show()
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
 
 
-def plot_data(matrix, save_path='C:\\Users\\Ishita Biswas\\OneDrive\\Pictures\\plot\\LH_all_post_NP.jpg'):
+def plot_data(matrix, save_path='C:\\Users\\Ishita Biswas\\OneDrive\\Pictures\\plot\\RH_all_pre_NP.jpg'):
     sns.set(style="whitegrid")
     matrix = np.array(matrix)
 
@@ -75,7 +72,7 @@ def plot_data(matrix, save_path='C:\\Users\\Ishita Biswas\\OneDrive\\Pictures\\p
     palette = sns.color_palette("husl", matrix.shape[0])
     for i in range(matrix.shape[0]):
         plt.plot(matrix[i, :], color=palette[i], linewidth=1.0)
-    # plt.title('LH_B_P', fontsize=16)
+    plt.title('RH_pre_NP', fontsize=16)
     plt.xlabel('TIME', fontsize=14)
     plt.ylabel('AMPLITUDE', fontsize=14)
     plt.legend(title="Data Rows", bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=12)
