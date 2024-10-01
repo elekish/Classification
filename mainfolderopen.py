@@ -7,7 +7,11 @@ from characteristics import calculate_statistics,flatten_3d_to_2d, z_normalize, 
     process_batches_for_normalised, process_batches_raw, flatten_3d_to_2d_col
 
 def load_and_extract_data(filepath):
+    # try:
     dataall = pd.read_excel(filepath, sheet_name='240229SN').to_numpy()
+    # except ValueError as e:
+    #     print(f"Error processing {filename}: {e}")
+
 
     LH = dataall[:, 11::7]
     RH = dataall[:, 12::7]
@@ -114,14 +118,51 @@ for key in data_dictP:
         if data_dictP[key][sub_key]:
             data_dictP[key][sub_key] = np.stack(data_dictP[key][sub_key])
         else:
-            data_dictP[key][sub_key] = np.zeros((0, 2400, 5))  # Handling empty cases as needed
+            data_dictP[key][sub_key] = np.zeros((0, 2400, 5))  
+
+
+def pad_array_to_shape(arr, target_shape):
+    arr = np.asarray(arr)
+    if arr.dtype.kind in {'U', 'S', 'O'}:
+        arr = np.where(arr == ' ', 0, arr)
+        arr = arr.astype(float)
+    current_shape = arr.shape
+    padded_array = np.zeros(target_shape)
+    rows = min(current_shape[0], target_shape[0])
+    cols = min(current_shape[1], target_shape[1])
+    padded_array[:rows, :cols] = arr[:rows, :cols]
+
+    return padded_array
+
+target_shape = (2400, 5)
 
 for key in data_dictNP:
     for sub_key in data_dictNP[key]:
         if data_dictNP[key][sub_key]:
-            data_dictNP[key][sub_key] = np.stack(data_dictNP[key][sub_key])
+            padded_arrays = [pad_array_to_shape(arr, target_shape) for arr in data_dictNP[key][sub_key]]
+            data_dictNP[key][sub_key] = np.stack(padded_arrays)
         else:
-            data_dictNP[key][sub_key] = np.zeros((0, 2400, 5))
+            data_dictNP[key][sub_key] = np.zeros((0, *target_shape))
+
+# for key in data_dictNP:
+#     for sub_key in data_dictNP[key]:
+#         if data_dictNP[key][sub_key]:
+#             data_dictNP[key][sub_key] = np.stack(data_dictNP[key][sub_key])
+#         else:
+#             data_dictNP[key][sub_key] = np.zeros((0, 2400, 5))
+
+# for key in data_dictNP:
+#     for sub_key in data_dictNP[key]:
+#         try:
+#             if data_dictNP[key][sub_key]:
+#                 data_dictNP[key][sub_key] = np.stack(data_dictNP[key][sub_key])
+#             else:
+#                 data_dictNP[key][sub_key] = np.zeros((0, 2400, 5))
+#         except ValueError as e:
+#             print(f"Error occurred in key: {key}, sub_key: {sub_key}")
+#             # print(f"Data: {data_dictNP[key][sub_key]}")
+#             print(f"Error message: {e}")
+
 
 LH_all_pre_P = data_dictP['B']['LH']
 RH_all_pre_P = data_dictP['B']['RH']
@@ -152,7 +193,8 @@ flattened_LH_all_post_P= flatten_3d_to_2d_col(LH_all_post_P)
 flattened_LH_all_post_NP= flatten_3d_to_2d_col(LH_all_post_NP)
 flattened_RH_all_post_P= flatten_3d_to_2d_col(RH_all_post_P)
 flattened_RH_all_post_NP= flatten_3d_to_2d_col(RH_all_post_NP)
-plot_data(flattened_LH_all_post_NP)
+
+plot_data(flattened_RH_all_pre_NP)
 # print(flattened_LH_all_pre_P[0,:])
 
 
