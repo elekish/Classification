@@ -32,6 +32,19 @@ def flatten_3d_to_2d(array_3d):
 
     return flattened_arrays
 
+
+def flatten_3d_to_2d_col(array_3d):
+    if array_3d.ndim != 3:
+        raise ValueError("Input array must be 3D")
+    n_slices, rows, cols = array_3d.shape
+    flattened_arrays = []
+    for i in range(n_slices):
+        array_2d = array_3d[i]
+        flattened_array = array_2d.T.flatten()  # Transpose to get columns first, then flatten
+        flattened_arrays.append(flattened_array)
+
+    return np.array(flattened_arrays)
+
 def z_normalize(array_1d, mean, std_dev):
     return (array_1d - mean) / std_dev
 
