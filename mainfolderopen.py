@@ -2,9 +2,12 @@ import os
 import numpy as np
 import pandas as pd
 from tkinter import filedialog
-from plot import plot_data
-from characteristics import calculate_statistics,flatten_3d_to_2d, z_normalize, \
+from plot import plot_data, plot_state_means
+from characteristics import calculate_statistics, flatten_3d_to_2d, z_normalize, \
     process_batches_for_normalised, process_batches_raw, flatten_3d_to_2d_col
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 def load_and_extract_data(filepath):
     # try:
@@ -118,7 +121,7 @@ for key in data_dictP:
         if data_dictP[key][sub_key]:
             data_dictP[key][sub_key] = np.stack(data_dictP[key][sub_key])
         else:
-            data_dictP[key][sub_key] = np.zeros((0, 2400, 5))  
+            data_dictP[key][sub_key] = np.zeros((0, 2400, 5))
 
 
 def pad_array_to_shape(arr, target_shape):
@@ -185,16 +188,17 @@ RH_all_post_NP = data_dictNP['A']['RH']
 # LL_all_post_NP = data_dictNP['A']['LL']
 # RL_all_post_NP = data_dictNP['A']['RL']
 
-flattened_LH_all_pre_P= flatten_3d_to_2d_col(LH_all_pre_P)
-flattened_LH_all_pre_NP= flatten_3d_to_2d_col(LH_all_pre_NP)
-flattened_RH_all_pre_P= flatten_3d_to_2d_col(RH_all_pre_P)
-flattened_RH_all_pre_NP= flatten_3d_to_2d_col(RH_all_pre_NP)
-flattened_LH_all_post_P= flatten_3d_to_2d_col(LH_all_post_P)
-flattened_LH_all_post_NP= flatten_3d_to_2d_col(LH_all_post_NP)
-flattened_RH_all_post_P= flatten_3d_to_2d_col(RH_all_post_P)
-flattened_RH_all_post_NP= flatten_3d_to_2d_col(RH_all_post_NP)
+plot_state_means(LH_all_pre_NP, RH_all_pre_NP)
+# flattened_LH_all_pre_P= flatten_3d_to_2d_col(LH_all_pre_P)
+# flattened_LH_all_pre_NP= flatten_3d_to_2d_col(LH_all_pre_NP)
+# flattened_RH_all_pre_P= flatten_3d_to_2d_col(RH_all_pre_P)
+# flattened_RH_all_pre_NP= flatten_3d_to_2d_col(RH_all_pre_NP)
+# flattened_LH_all_post_P= flatten_3d_to_2d_col(LH_all_post_P)
+# flattened_LH_all_post_NP= flatten_3d_to_2d_col(LH_all_post_NP)
+# flattened_RH_all_post_P= flatten_3d_to_2d_col(RH_all_post_P)
+# flattened_RH_all_post_NP= flatten_3d_to_2d_col(RH_all_post_NP)
 
-plot_data(flattened_RH_all_pre_NP)
+# plot_data(flattened_RH_all_pre_NP)
 # print(flattened_LH_all_pre_P[0,:])
 
 
@@ -202,10 +206,56 @@ plot_data(flattened_RH_all_pre_NP)
 
 # plot_data(LH_all_pre, RH_all_pre, LL_all_pre, RL_all_pre)
 
-# means_LH_all_pre, std_devs_LH_all_pre = calculate_statistics(LH_all_pre)
-# means_RH_all_pre, std_devs_RH_all_pre = calculate_statistics(RH_all_pre)
-# means_LH_all_post, std_devs_LH_all_post = calculate_statistics(LH_all_post)
-# means_RH_all_post, std_devs_RH_all_post = calculate_statistics(RH_all_post)
+
+
+# means_LH_all_pre_P, std_devs_LH_all_pre_P = calculate_statistics(LH_all_pre_P)
+# means_LH_all_pre_NP, std_devs_LH_all_pre_NP = calculate_statistics(LH_all_pre_NP)
+# means_RH_all_pre_P, std_devs_RH_all_pre_P = calculate_statistics(RH_all_pre_P)
+# means_RH_all_pre_NP, std_devs_RH_all_pre_NP = calculate_statistics(RH_all_pre_NP)
+# means_LH_all_post_P, std_devs_LH_all_post_P = calculate_statistics(LH_all_post_P)
+# means_LH_all_post_NP, std_devs_LH_all_post_NP = calculate_statistics(LH_all_post_NP)
+# means_RH_all_post_P, std_devs_RH_all_post_P = calculate_statistics(RH_all_post_P)
+# means_RH_all_post_NP, std_devs_RH_all_post_NP = calculate_statistics(RH_all_post_NP)
+
+# means_LH_all_pre_P = np.mean(flattened_LH_all_pre_P, axis=1)
+# means_LH_all_pre_NP = np.mean(flattened_LH_all_pre_NP, axis=1)
+# means_RH_all_pre_P = np.mean(flattened_RH_all_pre_P, axis=1)
+# means_RH_all_pre_NP = np.mean(flattened_RH_all_pre_NP, axis=1)
+# means_LH_all_post_P = np.mean(flattened_LH_all_post_P, axis=1)
+# means_LH_all_post_NP = np.mean(flattened_LH_all_post_NP, axis=1)
+# means_RH_all_post_P = np.mean(flattened_RH_all_post_P, axis=1)
+# means_RH_all_post_NP = np.mean(flattened_RH_all_post_NP, axis=1)
+# print(means_LH_all_pre_NP)
+#
+# for i in range(flattened_LH_all_pre_P.shape[0]):
+#     flattened_LH_all_pre_P[i, :] -= means_LH_all_pre_P[i]
+#
+# for i in range(flattened_LH_all_pre_NP.shape[0]):
+#     flattened_LH_all_pre_NP[i, :] -= means_LH_all_pre_NP[i]
+#
+# for i in range(flattened_RH_all_pre_P.shape[0]):
+#     flattened_RH_all_pre_P[i, :] -= means_RH_all_pre_P[i]
+#
+# for i in range(flattened_RH_all_pre_NP.shape[0]):
+#     flattened_RH_all_pre_NP[i, :] -= means_RH_all_pre_NP[i]
+#
+# for i in range(flattened_LH_all_post_P.shape[0]):
+#     flattened_LH_all_post_P[i, :] -= means_LH_all_post_P[i]
+#
+# for i in range(flattened_LH_all_post_NP.shape[0]):
+#     flattened_LH_all_post_NP[i, :] -= means_LH_all_post_NP[i]
+#
+# for i in range(flattened_RH_all_post_P.shape[0]):
+#     flattened_RH_all_post_P[i, :] -= means_RH_all_post_P[i]
+#
+# for i in range(flattened_RH_all_post_NP.shape[0]):
+#     flattened_RH_all_post_NP[i, :] -= means_RH_all_post_NP[i]
+#
+# deviation_pre_P = np.vstack((flattened_LH_all_pre_P, flattened_RH_all_pre_P))
+# deviation_pre_NP = np.vstack((flattened_LH_all_pre_NP, flattened_RH_all_pre_NP))
+# deviation_post_P = np.vstack((flattened_LH_all_post_P, flattened_RH_all_post_P))
+# deviation_post_NP = np.vstack((flattened_LH_all_post_NP, flattened_RH_all_post_NP))
+# plot_data(deviation_post_P)
 
 # Print the results but datatype np.float
 # print("LH Means:\n", means_LH)
