@@ -155,3 +155,67 @@ def plot_state_means(LH_all_pre_P, RH_all_pre_P, save_path='C:\\Users\\PC1\\Pict
 #     plot_state_means(LH_all_pre_P, RH_all_pre_P, LH_all_post_P, RH_all_post_P,
 #                      LH_all_pre_NP, RH_all_pre_NP, LH_all_post_NP, RH_all_post_NP)
 
+def plot_median_of_std(LH_all_pre_P, RH_all_pre_P):
+    combined_data = np.concatenate((LH_all_pre_P, RH_all_pre_P), axis=0)
+    
+    # Number of states (columns)
+    num_states = combined_data.shape[2]  # Assuming states are represented as columns
+    stds_per_state = []
+
+    # Calculate standard deviation of each column in each 2D array for each state
+    for state in range(num_states): 
+        stds_for_state = []
+        for matrix in combined_data: 
+            stds_for_state.append(np.mean(matrix[:, state]))  # Standard deviation for each state
+        stds_per_state.append(stds_for_state)
+
+    # Prepare data for boxplot
+    data_for_boxplot = [stds_per_state[state] for state in range(num_states)]
+
+    # Plotting
+    plt.figure(figsize=(10, 6))
+    sns.boxplot(data=data_for_boxplot, flierprops=dict(marker='+', markersize=10))  # Change outlier marker to '+'
+    plt.xticks(ticks=np.arange(num_states), labels=[f'State {i+1}' for i in range(num_states)])
+    plt.ylabel('Standard Deviation')
+    plt.title('Boxplot of Standard Deviations by State')
+    plt.grid(True)
+    plt.show()
+def plot_median_of_std(LH_all_pre_P, RH_all_pre_P):
+
+    combined_data = np.concatenate((LH_all_pre_P, RH_all_pre_P), axis=0)
+
+    #Number of states (columns)
+
+    num_states = combined_data.shape[2] # Assuming 5 states as columns 
+    means_per_state = []
+
+    # Calculate mean of each column in each 2D array
+
+    for state in range(num_states): 
+        means_for_state = []
+
+        for matrix in combined_data: 
+            means_for_state.append(np.std(matrix[:, state])) # Mean of each column for state 
+        means_per_state.append(means_for_state)
+
+    return means_per_state
+
+def plot_median_of_means(LH_all_pre_P, RH_all_pre_P):
+
+    combined_data = np.concatenate((LH_all_pre_P, RH_all_pre_P), axis=0)
+
+    #Number of states (columns)
+
+    num_states = combined_data.shape[2] # Assuming 5 states as columns 
+    means_per_state = []
+
+    # Calculate mean of each column in each 2D array
+
+    for state in range(num_states): 
+        means_for_state = []
+
+        for matrix in combined_data: 
+            means_for_state.append(np.mean(matrix[:, state])) # Mean of each column for state 
+        means_per_state.append(means_for_state)
+
+    return means_per_state
