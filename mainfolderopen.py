@@ -16,15 +16,15 @@ def load_and_extract_data(filepath):
     #     print(f"Error processing {filename}: {e}")
 
 
-    LH = dataall[:, 11::7]
-    RH = dataall[:, 12::7]
-    LL = dataall[:, 13::7]
-    RL = dataall[:, 14::7]
+    LH = dataall[:, 11:43:7]
+    RH = dataall[:, 12:43:7]
+    LL = dataall[:, 13:43:7]
+    RL = dataall[:, 14:43:7]
 
-    LH = LH[2:, :]
-    RH = RH[2:, :]
-    LL = LL[2:, :]
-    RL = RL[2:, :]
+    LH = LH[2:2404, :]
+    RH = RH[2:2404, :]
+    LL = LL[2:2404, :]
+    RL = RL[2:2404, :]
 
 
 
@@ -167,28 +167,46 @@ for key in data_dictNP:
 #             print(f"Error message: {e}")
 
 
-LH_all_pre_P = data_dictP['B']['LH']
-RH_all_pre_P = data_dictP['B']['RH']
+LH_all_pre_P = 1000*data_dictP['B']['LH']
+RH_all_pre_P = 1000*data_dictP['B']['RH']
 # LL_all_pre_P = data_dictP['B']['LL']
 # RL_all_pre_P = data_dictP['B']['RL']
 
-LH_all_post_P = data_dictP['A']['LH']
-RH_all_post_P = data_dictP['A']['RH']
+LH_all_post_P = 1000*data_dictP['A']['LH']
+RH_all_post_P = 1000*data_dictP['A']['RH']
 # LL_all_post_P = data_dictP['A']['LL']
 # RL_all_post_P = data_dictP['A']['RL']
 
 
-LH_all_pre_NP = data_dictNP['B']['LH']
-RH_all_pre_NP = data_dictNP['B']['RH']
+LH_all_pre_NP = 1000*data_dictNP['B']['LH']
+RH_all_pre_NP = 1000*data_dictNP['B']['RH']
 # LL_all_pre_NP = data_dictNP['B']['LL']
 # RL_all_pre_NP = data_dictNP['B']['RL']
 
-LH_all_post_NP = data_dictNP['A']['LH']
-RH_all_post_NP = data_dictNP['A']['RH']
+LH_all_post_NP = 1000*data_dictNP['A']['LH']
+RH_all_post_NP = 1000*data_dictNP['A']['RH']
 # LL_all_post_NP = data_dictNP['A']['LL']
 # RL_all_post_NP = data_dictNP['A']['RL']
 
-plot_state_means(LH_all_pre_NP, RH_all_pre_NP)
+x=plot_median_of_means(LH_all_pre_P, RH_all_pre_P)
+(np.array(x)).tofile('p_pre.csv', sep=',')
+x=plot_median_of_means(LH_all_post_P, RH_all_post_P)
+(np.array(x)).tofile('p_post.csv', sep=',')
+x=plot_median_of_means(LH_all_post_NP, RH_all_post_NP)
+(np.array(x)).tofile('np_post.csv', sep=',')
+x=plot_median_of_means(LH_all_pre_NP, RH_all_pre_NP)
+(np.array(x)).tofile('np_pre.csv', sep=',')
+
+x=plot_median_of_std(LH_all_pre_P, RH_all_pre_P)
+(np.array(x)).tofile('p_pre_std.csv', sep=',')
+x=plot_median_of_std(LH_all_post_P, RH_all_post_P)
+(np.array(x)).tofile('p_post_std.csv', sep=',')
+x=plot_median_of_std(LH_all_post_NP, RH_all_post_NP)
+(np.array(x)).tofile('np_post_std.csv', sep=',')
+x=plot_median_of_std(LH_all_pre_NP, RH_all_pre_NP)
+(np.array(x)).tofile('np_pre_std.csv', sep=',')
+
+# plot_state_means(LH_all_pre_NP, RH_all_pre_NP)
 # flattened_LH_all_pre_P= flatten_3d_to_2d_col(LH_all_pre_P)
 # flattened_LH_all_pre_NP= flatten_3d_to_2d_col(LH_all_pre_NP)
 # flattened_RH_all_pre_P= flatten_3d_to_2d_col(RH_all_pre_P)
